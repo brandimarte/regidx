@@ -1,5 +1,5 @@
 #  *******************************************************************  #
-#  regidx C code - 2016                                                 #
+#  regidx C++ code - 2016                                               #
 #                                                                       #
 #         ** Registry Index for Bilayer Carbon Based Systems **         #
 #                                                                       #
@@ -74,20 +74,20 @@ INCFLAGS = -I. $(MKL_INCLUDE)
 RM = /bin/rm -f
 
 # All source files.
-SRCS = Check.c Utils.c main.c
+SRCS = Check.cpp Utils.cpp main.cpp
 
 # All objects.
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SRCS:.cpp=.o)
 
 #  *******************************************************************  #
 
 # Rules to compile object files.
-.c.o:
-	$(CC) $(CFLAGS) -c $(INCFLAGS) $(FPPFLAGS) $*.c
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -c $(INCFLAGS) $(FPPFLAGS) $*.cpp
 
-.c:
+.cpp:
 	make $*.o
-	$(CC) $(CFLAGS) -o $(INCFLAGS) $(FPPFLAGS) $* $*.o $(LDLIBS) 
+	$(CXX) $(CXXFLAGS) -o $(INCFLAGS) $(FPPFLAGS) $* $*.o $(LDLIBS) 
 
 #  *******************************************************************  #
 
@@ -103,7 +103,7 @@ all: what $(EXEC)
 
 what:
 	@echo "#  ***************************************************  #"
-	@echo "#  REGIDX C Code 2016                                   #"
+	@echo "#  REGIDX C++ Code 2016                                 #"
 	@echo "#                                                       #"
 	@echo "#  Written by:                                          #"
 	@echo "#                                                       #"
@@ -126,7 +126,7 @@ what:
 	@sleep 2
 
 $(EXEC): $(OBJS)
-	$(CC) -o $@ $(CFLAGS) $(OBJS) $(LDLIBS) 
+	$(CXX) -o $@ $(CXXFLAGS) $(OBJS) $(LDLIBS)
 
 #  *******************************************************************  #
 

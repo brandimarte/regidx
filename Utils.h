@@ -1,5 +1,5 @@
 /**  ***************************************************************  **/
-/**  regidx C code - 2016                                             **/
+/**  regidx C++ code - 2016                                           **/
 /**                                                                   **/
 /**       ** Registry Index for Bilayer Carbon Based Systems **       **/
 /**                                                                   **/

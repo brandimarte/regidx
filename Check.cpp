@@ -1,5 +1,5 @@
 /**  ***************************************************************  **/
-/**  regidx C code - 2016                                             **/
+/**  regidx C++ code - 2016                                           **/
 /**                                                                   **/
 /**       ** Registry Index for Bilayer Carbon Based Systems **       **/
 /**                                                                   **/
@@ -19,7 +19,7 @@
 /**  distributed along with this program or at                        **/
 /**  <http://www.gnu.org/licenses/gpl.html>).                         **/
 /**  ***************************************************************  **/
-/**  File: Check.c                                                    **/
+/**  File: Check.cpp                                                  **/
 /**                                                                   **/
 /**  Description: Implementation of alternative calls of well known   **/
 /**  functions from 'stdio.h' and 'stdlib.h', and also functions      **/
@@ -56,8 +56,8 @@ void CHECKdsyevd (int n, double *M, double *eigval)
    dsyevd ("V", "U", &n, M, &n, eigval, &l, &lwork, &li, &liwork, &info);
    lwork = (int) l;
    liwork = li;
-   iwork = CHECKmalloc (liwork * sizeof (int));
-   work = CHECKmalloc (lwork * sizeof (double));
+   iwork = (int *) CHECKmalloc (liwork * sizeof (int));
+   work = (double *) CHECKmalloc (lwork * sizeof (double));
 
    /* Computes eigenvalues and eigenvectors. */
    dsyevd ("V", "U", &n, M, &n, eigval, work, &lwork, iwork, &liwork,
@@ -123,7 +123,7 @@ void CHECKdgetrf (int n, double *M, int *ipiv)
 void CHECKdgetri (int n, double *M, int *ipiv)
 {
    int info = 0;
-   double *work = CHECKmalloc (n * sizeof (double));
+   double *work = (double *) CHECKmalloc (n * sizeof (double));
 
    dgetri (&n, M, &n, ipiv, work, &n, &info);
    if (info < 0) {

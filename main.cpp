@@ -1,5 +1,5 @@
 /**  ***************************************************************  **/
-/**  regidx C code - 2016                                             **/
+/**  regidx C++ code - 2016                                           **/
 /**                                                                   **/
 /**       ** Registry Index for Bilayer Carbon Based Systems **       **/
 /**                                                                   **/
@@ -109,28 +109,36 @@ int main (int nargs, char *arg[])
 static void header ()
 {
    printf("\n");
-   printf("**  *******************************************************\t"
-	  "********  **\n");
-   printf("**              ** WELCOME TO REGIDX C CODE v2016.01 **    \t"
-	  "          **\n\n");
-   printf("**        * Registry Index for Bilayer Carbon Based Systems\t"
-	  " *        **\n\n");
-   printf("**  Written by Pedro Brandimarte (brandimarte@gmail.com)   \t"
-	  "          **\n\n");
-   printf("**  Copyright (c), All Rights Reserved                     \t"
-	  "          **\n\n");
-   printf("**  This program is free software. You can redistribute it \t"
-	  "and/or    **\n");
-   printf("**  modify it under the terms of the GNU General Public \t"
-	  "License      **\n");
-   printf("**  (version 3 or later) as published by the Free Software \t"
-	  "          **\n");
-   printf("**  Foundation <http://fsf.org/>. See the GNU General \t"
-	  "Public         **\n");
-   printf("**  License for more details.                              \t"
-	  "          **\n");
-   printf("**  *******************************************************\t"
-	  "********  **\n");
+   printf("**  *******************************************************"
+	  "******  **\n");
+   printf("**             ** WELCOME TO REGIDX C CODE v2016.01 **     "
+	  "        **\n");
+   printf("**                                                         "
+	  "        **\n");
+   printf("**       * Registry Index for Bilayer Carbon Based Systems "
+	  "*       **\n");
+   printf("**                                                         "
+	  "        **\n");
+   printf("**  Written by Pedro Brandimarte (brandimarte@gmail.com)   "
+	  "        **\n");
+   printf("**                                                         "
+	  "        **\n");
+   printf("**  Copyright (c), All Rights Reserved                     "
+	  "        **\n");
+   printf("**                                                         "
+	  "        **\n");
+   printf("**  This program is free software. You can redistribute it "
+	  "and/or  **\n");
+   printf("**  modify it under the terms of the GNU General Public "
+	  "License    **\n");
+   printf("**  (version 3 or later) as published by the Free Software "
+	  "        **\n");
+   printf("**  Foundation <http://fsf.org/>. See the GNU General "
+	  "Public       **\n");
+   printf("**  License for more details.                              "
+	  "        **\n");
+   printf("**  *******************************************************"
+	  "******  **\n");
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
 
 } /* header */
@@ -144,6 +152,6 @@ static void howto ()
    fprintf (stderr, "\n Usage: regidx"); /* arg[0] */
    fprintf (stderr, " [bottom xyz coordinate file]"); /* arg[1] */
    fprintf (stderr, " [top xyz coordinate file]\n\n"); /* arg[2] */
-   fprintf (stderr, " Example : regidx bottom.xyz top.xyz\n\n");
+   fprintf (stderr, " Example: regidx bottom.xyz top.xyz\n\n");
 
 } /* howto */

@@ -1,5 +1,5 @@
 /**  ***************************************************************  **/
-/**  regidx C code - 2016                                             **/
+/**  regidx C++ code - 2016                                           **/
 /**                                                                   **/
 /**       ** Registry Index for Bilayer Carbon Based Systems **       **/
 /**                                                                   **/
@@ -48,7 +48,7 @@ void *UTILintVector (int n)
    register int i;
    int *V;
 
-   V = CHECKmalloc (n * sizeof (int));
+   V = (int *) CHECKmalloc (n * sizeof (int));
 
    for (i = 0; i < n; i++)
       V[i] = 0;
@@ -65,7 +65,7 @@ void *UTILdoubleVector (int n)
    register int i;
    double *V;
 
-   V = CHECKmalloc (n * sizeof (double));
+   V = (double *) CHECKmalloc (n * sizeof (double));
 
    for (i = 0; i < n; i++)
       V[i] = 0.0;
