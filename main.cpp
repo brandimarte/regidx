@@ -45,11 +45,13 @@
 /**  Original version:    January 2016                                **/
 /**  ***************************************************************  **/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include "Utils.h"
-/* #include "Phonon.h" */
+#include <iostream>
+#include <cstdlib>
+#include <iomanip>
+#include <ctime>
+#include "RI.h"
+
+using namespace std;
 
 /* Prints the header on the screen. */
 static void header ();
@@ -59,8 +61,6 @@ static void howto ();
 
 int main (int nargs, char *arg[])
 {
-   /* int nDynTot, nDynOrb, spinPol, calcType; */
-   /* double *EigVec, *EigVal, *Meph; */
    double time;
    clock_t inicial, final;
 
@@ -68,8 +68,8 @@ int main (int nargs, char *arg[])
    header ();
 
    /* Checks if the input were typed correctly. */
-   if (nargs < 2 || nargs > 3) {
-      fprintf (stderr, "\n Wrong number of arguments!\n");
+   if (nargs != 3) {
+      cerr << "\n Wrong number of arguments!\n";
       howto ();
       exit (EXIT_FAILURE);
    }
@@ -77,27 +77,14 @@ int main (int nargs, char *arg[])
    /* Time is running. */
    inicial = clock();
 
-   /* Reads info from FC fdf input file. */
-   /* PHONreadFCfdf (arg[0], arg[1], arg[2], calcType, arg[4], */
-   /* 		  &nDynTot, &nDynOrb, &spinPol); */
-
-   /* Computes phonon frequencies. */
-   /* EigVec = UTILdoubleVector (nDynTot * nDynTot); */
-   /* EigVal = UTILdoubleVector (nDynTot); */
-   /* PHONfreq (EigVec, EigVal); */
-
-   /* Writes a 'xyz' file for each computed phonon mode. */
-   /* PHONjmolVib (EigVec); */
-
-   /* Frees memory. */
-   /* free (EigVec); */
-   /* free (EigVal); */
-   /* free (Meph); */
+   /* Read coordinate input files. */
+   RIreadXYZ (arg[0], arg[1]);
 
    /* Calculates the execution time. */
    final = clock();
    time = (double)(final - inicial) / CLOCKS_PER_SEC;
-   printf ("\n This calculation took %.2f seconds.\n\n", time);
+   cout << "\n This calculation took " << setiosflags(ios::fixed)
+	<< setprecision(2) << time << " seconds.\n\n";
 
    return 0;
    
@@ -108,37 +95,37 @@ int main (int nargs, char *arg[])
 /* Prints the header on 'stdout'.                                      */
 static void header ()
 {
-   printf("\n");
-   printf("**  *******************************************************"
-	  "******  **\n");
-   printf("**             ** WELCOME TO REGIDX C CODE v2016.01 **     "
-	  "        **\n");
-   printf("**                                                         "
-	  "        **\n");
-   printf("**       * Registry Index for Bilayer Carbon Based Systems "
-	  "*       **\n");
-   printf("**                                                         "
-	  "        **\n");
-   printf("**  Written by Pedro Brandimarte (brandimarte@gmail.com)   "
-	  "        **\n");
-   printf("**                                                         "
-	  "        **\n");
-   printf("**  Copyright (c), All Rights Reserved                     "
-	  "        **\n");
-   printf("**                                                         "
-	  "        **\n");
-   printf("**  This program is free software. You can redistribute it "
-	  "and/or  **\n");
-   printf("**  modify it under the terms of the GNU General Public "
-	  "License    **\n");
-   printf("**  (version 3 or later) as published by the Free Software "
-	  "        **\n");
-   printf("**  Foundation <http://fsf.org/>. See the GNU General "
-	  "Public       **\n");
-   printf("**  License for more details.                              "
-	  "        **\n");
-   printf("**  *******************************************************"
-	  "******  **\n");
+   cout << "\n";
+   cout << "**  *******************************************************"
+      "******  **\n";
+   cout << "**            ** WELCOME TO REGIDX C++ CODE v2016.01 **    "
+      "        **\n";
+   cout << "**                                                         "
+      "        **\n";
+   cout << "**       * Registry Index for Bilayer Carbon Based Systems "
+      "*       **\n";
+   cout << "**                                                         "
+      "        **\n";
+   cout << "**  Written by Pedro Brandimarte (brandimarte@gmail.com)   "
+      "        **\n";
+   cout << "**                                                         "
+      "        **\n";
+   cout << "**  Copyright (c), All Rights Reserved                     "
+      "        **\n";
+   cout << "**                                                         "
+      "        **\n";
+   cout << "**  This program is free software. You can redistribute it "
+      "and/or  **\n";
+   cout << "**  modify it under the terms of the GNU General Public "
+      "License    **\n";
+   cout << "**  (version 3 or later) as published by the Free Software "
+      "        **\n";
+   cout << "**  Foundation <http://fsf.org/>. See the GNU General "
+      "Public       **\n";
+   cout << "**  License for more details.                              "
+      "        **\n";
+   cout << "**  *******************************************************"
+      "******  **\n";
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
 
 } /* header */
@@ -149,9 +136,9 @@ static void header ()
 static void howto ()
 {
 
-   fprintf (stderr, "\n Usage: regidx"); /* arg[0] */
-   fprintf (stderr, " [bottom xyz coordinate file]"); /* arg[1] */
-   fprintf (stderr, " [top xyz coordinate file]\n\n"); /* arg[2] */
-   fprintf (stderr, " Example: regidx bottom.xyz top.xyz\n\n");
+   cerr << "\n Usage: regidx"; /* arg[0] */
+   cerr << " [bottom xyz coordinate file]"; /* arg[1] */
+   cerr << " [top xyz coordinate file]\n\n"; /* arg[2] */
+   cerr << " Example: regidx bottom.xyz top.xyz\n\n";
 
 } /* howto */

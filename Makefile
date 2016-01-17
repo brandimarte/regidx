@@ -74,7 +74,7 @@ INCFLAGS = -I. $(MKL_INCLUDE)
 RM = /bin/rm -f
 
 # All source files.
-SRCS = Check.cpp Utils.cpp main.cpp
+SRCS = Check.cpp Utils.cpp RI.cpp main.cpp
 
 # All objects.
 OBJS = $(SRCS:.cpp=.o)

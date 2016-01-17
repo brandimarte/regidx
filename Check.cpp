@@ -34,11 +34,12 @@
 /**  Original version:    January 2016                                **/
 /**  ***************************************************************  **/
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+#include <cstdlib>
 #include "Extern.h"
 #include "Check.h"
 
+using namespace std;
 
 /* ******************************************************************* */
 /* Lapack rotine: computes all eigenvalues and eigenvectors of a real  */
@@ -61,21 +62,18 @@ void CHECKdsyevd (int n, double *M, double *eigval)
 
    /* Computes eigenvalues and eigenvectors. */
    dsyevd ("V", "U", &n, M, &n, eigval, work, &lwork, iwork, &liwork,
-	   &info);
+           &info);
    if (info < 0) {
-      fprintf (stderr, "\n In lapack dsyevd: \n");
-      fprintf (stderr, " The %d-th argument had an illegal value\n",
-	       -info);
+      cerr << "\n In lapack dsyevd: \n";
+      cerr << " The " << -info << "-th argument had an illegal value\n";
       exit (EXIT_FAILURE);
    }
    if (info > 0) {
-      fprintf (stderr, "\n In lapack dsyevd: \n");
-      fprintf (stderr,
-	       " The algorithm has failed to compute an eigenvalue\n");
-      fprintf (stderr,
-	       " while working on the submatrix lying in rows and \n");
-      fprintf (stderr, " columns %d through %d!\n\n", info/(n + 1),
-	       info%(n + 1));
+      cerr << "\n In lapack dsyevd: \n";
+      cerr << " The algorithm has failed to compute an eigenvalue\n";
+      cerr << " while working on the submatrix lying in rows and \n";
+      cerr << " columns " << info/(n + 1) << " through " << info%(n + 1)
+           << "!\n\n";
       exit (EXIT_FAILURE);
    }
 
@@ -96,21 +94,18 @@ void CHECKdgetrf (int n, double *M, int *ipiv)
 
    dgetrf (&n, &n, M, &n, ipiv, &info);
    if (info < 0) {
-      fprintf (stderr, "\n In lapack dgetrf: \n");
-      fprintf (stderr, "\n The %d-th argument had an illegal value.\n\n",
-	       info);
+      cerr << "\n In lapack dgetrf: \n";
+      cerr << "\n The " << info
+           << "-th argument had an illegal value.\n\n";
       exit (EXIT_FAILURE);
    }
    else if (info > 0) {
-      fprintf (stderr, "\n In lapack dgetrf: \n");
-      fprintf (stderr,
-	       " U(%d,%d) is exactly zero. The factorization has\n",
-	       info, info);
-      fprintf (stderr, " been completed, but the factor U is exactly\n");
-      fprintf (stderr,
-	       " singular, and division by zero will occur if\n");
-      fprintf (stderr,
-	       " it is used to solve a system of equations.\n\n");
+      cerr << "\n In lapack dgetrf: \n";
+      cerr << " U(" << info << "," << info
+           << ") is exactly zero. The factorization has\n";
+      cerr << " been completed, but the factor U is exactly\n";
+      cerr << " singular, and division by zero will occur if\n";
+      cerr << " it is used to solve a system of equations.\n\n";
    }
 
 } /* CHECKdgetrf */
@@ -127,17 +122,15 @@ void CHECKdgetri (int n, double *M, int *ipiv)
 
    dgetri (&n, M, &n, ipiv, work, &n, &info);
    if (info < 0) {
-      fprintf (stderr, "\n In lapack dgetri: \n");
-      fprintf (stderr, " The %d-th argument had an illegal value\n",
-	       info);
+      cerr << "\n In lapack dgetri: \n";
+      cerr << " The " << info << "-th argument had an illegal value\n";
       exit (EXIT_FAILURE);
    }
    else if (info > 0) {
-      fprintf (stderr, "\n In lapack dgetri: \n");
-      fprintf (stderr,
-	       " U(%d,%d) is exactly zero. The matrix is singular\n",
-	       info, info);
-      fprintf (stderr, " and its inverse could not be computed.\n\n");
+      cerr << "\n In lapack dgetri: \n";
+      cerr << " U(" << info << "," << info
+	   << ") is exactly zero. The matrix is singular\n";
+      cerr << " and its inverse could not be computed.\n\n";
       exit (EXIT_FAILURE);
    }
 
@@ -156,7 +149,7 @@ void *CHECKmalloc (unsigned int nbytes)
    ptr = malloc (nbytes);
 
    if (ptr == NULL) {    
-      fprintf (stderr, "\n\n Insufficient memory.\n\n");
+      cerr << "\n\n Insufficient memory.\n\n";
       exit(EXIT_FAILURE);
    }
 
@@ -175,7 +168,7 @@ void *CHECKrealloc (void *ptr1, unsigned int nbytes)
    ptr2 = realloc (ptr1, nbytes);
 
    if (ptr2 == NULL) {    
-      fprintf (stderr, "\n\n Insufficient memory.\n\n");
+      cerr << "\n\n Insufficient memory.\n\n";
       exit (EXIT_FAILURE);
    }
 
@@ -194,8 +187,8 @@ FILE *CHECKfopen (const char *filename, const char *mode)
 
    pfile = fopen (filename, mode);
    if (pfile == NULL) {
-      fprintf (stderr, "\n\n Error: Unable to open the file '%s'!\n\n",
-	       filename);
+      cerr << "\n\n Error: Unable to open the file '" << filename
+	   << "'!\n\n";
       exit (EXIT_FAILURE);
    }
 
@@ -212,8 +205,8 @@ void CHECKfclose (int info, const char *filename)
 {
 
    if (info != 0) {
-      fprintf (stderr, "\n\n Error: Unable to close the file '%s'!\n\n",
-	       filename);
+      cerr << "\n\n Error: Unable to close the file '" << filename
+	   << "'!\n\n";
       exit (EXIT_FAILURE);
    }
 
@@ -228,8 +221,8 @@ void CHECKfclose (int info, const char *filename)
 void CHECKfscanf (int info, const char *filename)
 {
    if (info == EOF) {
-      fprintf (stderr, "\n\n Error: Unable to read the file '%s'!\n\n",
-	       filename);
+      cerr << "\n\n Error: Unable to read the file '" << filename
+	   << "'!\n\n";
       exit (EXIT_FAILURE);
    }
    
@@ -243,8 +236,8 @@ void CHECKfscanf (int info, const char *filename)
 void CHECKsscanf (int info, int nvar, char *str)
 {
    if (info != nvar) {
-      fprintf (stderr,
-	       "\n\n Error: Problem reading the string '%s'!\n\n", str);
+      cerr << "\n\n Error: Problem reading the string '" << str
+	   << "'!\n\n";
       exit (EXIT_FAILURE);
    }
    
@@ -258,12 +251,11 @@ void CHECKsscanf (int info, int nvar, char *str)
 /* which indicates either an error ocurred or the 'End Of File' was    */
 /* reached.                                                            */
 void CHECKfread (unsigned int info, unsigned int count,
-		 const char *filename)
+                 const char *filename)
 {
    if (info != count) {
-      fprintf (stderr,
-	       "\n\n Error: Read something strange at file '%s'!\n\n",
-	       filename);
+      cerr << "\n\n Error: Read something strange at file '" << filename
+	   << "'!\n\n";
       /* exit (EXIT_FAILURE); */
    }
    

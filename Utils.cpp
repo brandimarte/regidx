@@ -32,11 +32,12 @@
 /**  Original version:    January 2016                                **/
 /**  ***************************************************************  **/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <iostream>
+#include <cmath>
 #include "Check.h"
 #include "Utils.h"
+
+using namespace std;
 
 
 /**  **************** Matrix and Vectors Utilities *****************  **/
@@ -108,7 +109,7 @@ void UTILcheckSym (char *name, double *M, int n, double lim)
    for (j = 0; j < n - 1; j++)
       for (i = j + 1; i < n; i++)
 	 if (fabs(M[idx(i,j,n)] - M[idx(j,i,n)]) > lim) {
-	    printf ("\n The matrix %s is not symmetric!\n", name);
+	    cout << "\n The matrix " << name << " is not symmetric!\n";
 	    return ;
 	 }
 
