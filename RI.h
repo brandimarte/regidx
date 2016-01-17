@@ -41,4 +41,4 @@
 #endif
 
 /* Collects required informations from coordinate 'XYZ' input files. */
-void RIreadXYZ (char *bot, char *top);
+void RIreadXYZ (char *exec, char *bot, char *top);

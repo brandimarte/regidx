@@ -34,13 +34,34 @@
 /**  Original version:    January 2016                                **/
 /**  ***************************************************************  **/
 
+#include <iostream>
+#include <cstring>
 #include "RI.h"
+#include "Check.h"
+
+using namespace std;
+
+static char *workDir; /* work directory */
+
 
 /* ******************************************************************* */
 /* Receive the coordinate file names from the bottom and top           */
 /* structures and read those files.                                    */
-void RIreadXYZ (char *bot, char *top)
+void RIreadXYZ (char *exec, char *bot, char *top)
 {
+   register int i, len;
+
+   /* Get the lenth of work directory path. */
+   len = strlen (exec);
+   for (i = len; i >= 0; i--)
+      if (exec[i] == '/') break;
+   len = i + 1;
+
+   /* Assigns the work directory global variable. */
+   workDir = (char *) CHECKmalloc (len * sizeof (char));
+   for (i = 0; i < len; i++)
+      workDir[i] = exec[i];
+   workDir[i] = '\0';
 
 
 } /* RIreadXYZ */
