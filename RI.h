@@ -40,12 +40,11 @@
 #define RIreadXYZ rireadxyz_
 #endif
 
-using namespace std;
-
-static char *workDir; /* work directory */
+static link head;
 
 class Coord {
 public:
+   char name[2];
    double x;
    double y;
 };
@@ -54,4 +53,4 @@ public:
 void RIinit (char *exec, char *bot, char *top);
 
 /* Read coordinate 'XYZ file. */
-void RIreadXYZ (char *file, int *n, Coord *xy);
+void RIoverlap (Coord bot, Coord top);

@@ -40,18 +40,52 @@
 #include "RI.h"
 #include "Check.h"
 
+using namespace std;
+
+static char *workDir; /* work directory */
+
+typedef struct Atom *atm;
+struct Atom{ double x; double y; atm *next; };
+
+static atm headB;
+static atm headT;
+
+/* ******************************************************************* */
+/* Create a new 'Atom' and returns its pointer.                        */
+static atm NEW ()
+{
+   int i;
+   atm a;
+
+   a = (atm *) CHECKmalloc (sizeof *a); /* allocate the 'Atom' */
+   a->x = 0;
+   a->y = 0;
+   a->next = NULL;
+
+   return a;
+
+} /* NEW */
+
+/* ******************************************************************* */
+/* Initialize two linked lists (create their head nodes).              */
+void ATinit ()
+{
+   headB = NEW (); /* creates the head node */
+   headT = NEW (); /* creates the head node */
+
+} /* ATinit */
+
 /* ******************************************************************* */
 /* Receive the coordinate file names from the bottom and top           */
 /* structures and read those files.                                    */
 void RIinit (char *exec, char *bot, char *top)
 {
-   register int i, len;
+   register int i, j, len;
    int nBot, nTop;
    Coord *xyBot, *xyTop;
    char *inputFile;
    ifstream Fxyz;
-   char foo1;
-   double foo2;
+   double foo;
 
    /* Get the lenth of work directory path. */
    len = strlen (exec);
@@ -65,12 +99,15 @@ void RIinit (char *exec, char *bot, char *top)
       workDir[i] = exec[i];
    workDir[i] = '\0';
 
-   /* Sets the bottom xyz file name with work directory path. */
+   /* Create two 'Atom' linked list. */
+   ATinit ();
+
+   /* Sets 'bottom' xyz file name with work directory path. */
    len = strlen (workDir) + strlen(bot);
    inputFile = (char *) CHECKmalloc (len * sizeof (char));
    sprintf (inputFile, "%s%s", workDir, bot);
    Fxyz.open (inputFile, ifstream::in);
-   Fxyz >> nBot; // # of atoms
+   Fxyz >> nBot; // # bottom of atoms
    xyBot = new Coord[nBot];
    for (i = 0; i < nBot; i++) {
       Fxyz >> foo1;
@@ -79,42 +116,38 @@ void RIinit (char *exec, char *bot, char *top)
       Fxyz >> foo2;
    }
    Fxyz.close ();
-   for (i = 0; i < nBot; i++) {
-      printf ("%d  %f  %f\n", i+1, xyBot[i].x, xyBot[i].y);
-   }
-
-   /* Free memory. */
    free (inputFile);
 
+   /* Sets 'top' xyz file name with work directory path. */
+   len = strlen (workDir) + strlen(top);
+   inputFile = (char *) CHECKmalloc (len * sizeof (char));
+   sprintf (inputFile, "%s%s", workDir, top);
+   Fxyz.open (inputFile, ifstream::in);
+   Fxyz >> nTop; // # top of atoms
+   xyTop = new Coord[nTop];
+   for (i = 0; i < nTop; i++) {
+      Fxyz >> xyTop[i].chel;
+      Fxyz >> xyTop[i].x;
+      Fxyz >> xyTop[i].y;
+      Fxyz >> foo;
+   }
+   Fxyz.close ();
+   free (inputFile);
+
+   for (i = 0; i < nTop; i++)
+      RIoverlap (xyBot[i], xyTop[i]);
 
 } // RIinit
 
 /* ******************************************************************* */
-/* Receive a coordinate file and reads the structure size 'n' and the  */
-/* 'x' and 'y' coordinates.                                            */
-void RIreadXYZ (char *file, int *n, Coord *xy)
+void RIoverlap (Coord bot, Coord top)
 {
-   register int i;
-   ifstream Fxyz;
-   char foo1;
-   double foo2;
+   // register int i;
 
-   Fxyz.open (file, ifstream::in);
-
-   Fxyz >> *n; // # of atoms
-
-   xy = new Coord[*n];
-   for (i = 0; i < *n; i++) {
-      Fxyz >> foo1;
-      Fxyz >> xy[i].x;
-      Fxyz >> xy[i].y;
-      Fxyz >> foo2;
-   }
-
-   Fxyz.close ();
+   cout << bot.x << "  " << bot.y << "  " << top.x << "  " << top.y << endl;
 
 
-} // RIreadXYZ
+} // RIoverlap
 
 /* ***************************** Drafts ****************************** */
 
