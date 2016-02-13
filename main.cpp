@@ -78,7 +78,7 @@ int main (int nargs, char *arg[])
    inicial = clock();
 
    /* Read coordinate input files. */
-   RIreadXYZ (arg[0], arg[1], arg[2]);
+   RIinit (arg[0], arg[1], arg[2]);
 
    /* Calculates the execution time. */
    final = clock();

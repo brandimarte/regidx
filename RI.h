@@ -40,5 +40,18 @@
 #define RIreadXYZ rireadxyz_
 #endif
 
-/* Collects required informations from coordinate 'XYZ' input files. */
-void RIreadXYZ (char *exec, char *bot, char *top);
+using namespace std;
+
+static char *workDir; /* work directory */
+
+class Coord {
+public:
+   double x;
+   double y;
+};
+
+/* Collect required informations from coordinate 'XYZ' input files. */
+void RIinit (char *exec, char *bot, char *top);
+
+/* Read coordinate 'XYZ file. */
+void RIreadXYZ (char *file, int *n, Coord *xy);
