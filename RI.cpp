@@ -26,12 +26,12 @@
 /**   - reads the coordinates from bottom and top structures from     **/
 /**   two given xyz input files;                                      **/
 /**                                                                   **/
-/**  Written by Pedro Brandimarte, Dec 2016.                          **/
+/**  Written by Pedro Brandimarte, Feb 2016.                          **/
 /**  Centro de Fisica de Materiales - CFM                             **/
 /**  Donostia - San Sebastian, Spain                                  **/
 /**  e-mail: brandimarte@gmail.com                                    **/
 /**  ***************************** HISTORY *************************  **/
-/**  Original version:    January 2016                                **/
+/**  Original version:    February 2016                               **/
 /**  ***************************************************************  **/
 
 #include <iostream>
@@ -214,7 +214,6 @@ void RI ()
 
    regIdx = (S - S_AB)/(S_AA - S_AB);
 
-   cout << S << " " << S_AA << " " << S_AB << endl;
    printf (" Registry Index: %.10f\n", regIdx);
 
 } // RI

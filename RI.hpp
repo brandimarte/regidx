@@ -26,12 +26,12 @@
 /**   - reads the coordinates from bottom and top structures from     **/
 /**   two given xyz input files;                                      **/
 /**                                                                   **/
-/**  Written by Pedro Brandimarte, Dec 2016.                          **/
+/**  Written by Pedro Brandimarte, Feb 2016.                          **/
 /**  Centro de Fisica de Materiales - CFM                             **/
 /**  Donostia - San Sebastian, Spain                                  **/
 /**  e-mail: brandimarte@gmail.com                                    **/
 /**  ***************************** HISTORY *************************  **/
-/**  Original version:    January 2016                                **/
+/**  Original version:    February 2016                               **/
 /**  ***************************************************************  **/
 
 typedef struct Atom *atm;

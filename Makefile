@@ -23,12 +23,12 @@
 #                                                                       #
 #  Description: main Makefile for building 'regidx' code.               #
 #                                                                       #
-#  Written by Pedro Brandimarte, Dec 2016.                              #
+#  Written by Pedro Brandimarte, Feb 2016.                              #
 #  Centro de Fisica de Materiales - CFM                                 #
 #  Donostia - San Sebastian, Spain                                      #
 #  e-mail: brandimarte@gmail.com                                        #
 #  ***************************** HISTORY *****************************  #
-#  Original version:    January 2016                                    #
+#  Original version:    February 2016                                   #
 #  *******************************************************************  #
 
 REGIDX_DIR = .
@@ -37,35 +37,13 @@ include $(REGIDX_DIR)/make.inc
 # If not set, use default variable names.
 EXEC ?= regidx
 
-# Check for MKL directory and give user hint how to set it.
-ifeq ($(MKL),)
-    ifeq ($(MKLROOT),)
-        vars_sh  := $(shell which icc 2>/dev/null | perl -pe            \
-         's|/bin.*/icc|/mkl/bin/mklvars.sh|')
-        vars_csh := $(shell which icc 2>/dev/null | perl -pe            \
-         's|/bin.*/icc|/mkl/bin/mklvars.csh|')
-        ifeq ($(vars_sh),)
-            vars_sh  := /opt/intel/composerxe/mkl/bin/mklvars.sh
-            vars_csh := /opt/intel/composerxe/mkl/bin/mklvars.csh
-        endif
-        $(error Set $$MKLROOT, preferably in your environment, e.g.,    \
-         run "source $(vars_sh) intel64" in ~/.bashrc, or               \
-         "source $(vars_csh) intel64" in ~/.cshrc)
-    endif
-
-    ifeq ($(wildcard $(MKLROOT)),)
-        $(error $$MKLROOT=$(MKLROOT) does not exist. Please set         \
-         $$MKLROOT to where MKL is installed.)
-    endif
-endif
-
 #  *******************************************************************  #
 
 # All libraries.
-LDLIBS = $(MKL_LIBS) $(OTHER_LIBS)
+LDLIBS = $(LIBS)
 
 # All includes.
-INCFLAGS = -I. $(MKL_INCLUDE)
+INCFLAGS = -I.
 
 # Preprocessor definitions or flags.
 #FPPFLAGS = 
@@ -74,7 +52,7 @@ INCFLAGS = -I. $(MKL_INCLUDE)
 RM = /bin/rm -f
 
 # All source files.
-SRCS = Check.cpp Utils.cpp RI.cpp main.cpp
+SRCS = RI.cpp main.cpp
 
 # All objects.
 OBJS = $(SRCS:.cpp=.o)
@@ -118,7 +96,6 @@ what:
 	@echo "#  <http://fsf.org/>.                                   #"
 	@echo "#  ***************************************************  #"
 	@echo ""
-	@echo	
 	@echo "Compilation architecture to be used: ${REGIDX_ARCH}"
 	@echo
 	@echo "Hit ^C to abort..."

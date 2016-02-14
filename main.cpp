@@ -37,12 +37,12 @@
 /**                                                                   **/
 /**  Usage: ./regidx bottom.xyz top.xyz                               **/
 /**                                                                   **/
-/**  Written by Pedro Brandimarte, Dec 2016.                          **/
+/**  Written by Pedro Brandimarte, Feb 2016.                          **/
 /**  Centro de Fisica de Materiales - CFM                             **/
 /**  Donostia - San Sebastian, Spain                                  **/
 /**  e-mail: brandimarte@gmail.com                                    **/
 /**  ***************************** HISTORY *************************  **/
-/**  Original version:    January 2016                                **/
+/**  Original version:    February 2016                               **/
 /**  ***************************************************************  **/
 
 #include <iostream>
