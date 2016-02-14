@@ -49,7 +49,7 @@
 #include <cstdlib>
 #include <iomanip>
 #include <ctime>
-#include "RI.h"
+#include "RI.hpp"
 
 using namespace std;
 
@@ -68,7 +68,7 @@ int main (int nargs, char *arg[])
    header ();
 
    /* Checks if the input were typed correctly. */
-   if (nargs != 3) {
+   if (nargs != 4) {
       cerr << "\n Wrong number of arguments!\n";
       howto ();
       exit (EXIT_FAILURE);
@@ -79,6 +79,12 @@ int main (int nargs, char *arg[])
 
    /* Read coordinate input files. */
    RIinit (arg[0], arg[1], arg[2]);
+
+   /* Compute total overlap. */
+   RIoverlap (arg[3]);
+
+   /* Compute the registry index. */
+   RI ();
 
    /* Calculates the execution time. */
    final = clock();
@@ -125,7 +131,7 @@ static void header ()
    cout << "**  License for more details.                              "
       "        **\n";
    cout << "**  *******************************************************"
-      "******  **\n";
+      "******  **\n\n";
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
 
 } /* header */
@@ -136,9 +142,10 @@ static void header ()
 static void howto ()
 {
 
-   cerr << "\n Usage: regidx"; /* arg[0] */
-   cerr << " [bottom xyz coordinate file]"; /* arg[1] */
-   cerr << " [top xyz coordinate file]\n\n"; /* arg[2] */
-   cerr << " Example: regidx bottom.xyz top.xyz\n\n";
+   cerr << "\n Usage: $ regidx"; // arg[0]
+   cerr << " [bottom xyz coordinate file] \\\n"; // arg[1]
+   cerr << "        > [top xyz coordinate file]"; // arg[2]
+   cerr << " [circle radius (angstrom)]\n\n"; // arg[3]
+   cerr << " Example: $ regidx bottom.xyz top.xyz 0.71\n\n";
 
 } /* howto */

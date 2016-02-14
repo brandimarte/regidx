@@ -34,8 +34,8 @@
 
 #include <iostream>
 #include <cmath>
-#include "Check.h"
-#include "Utils.h"
+#include "Check.hpp"
+#include "Utils.hpp"
 
 using namespace std;
 

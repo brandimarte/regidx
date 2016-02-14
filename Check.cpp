@@ -36,8 +36,8 @@
 
 #include <iostream>
 #include <cstdlib>
-#include "Extern.h"
-#include "Check.h"
+#include "Extern.hpp"
+#include "Check.hpp"
 
 using namespace std;
 

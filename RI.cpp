@@ -37,18 +37,19 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
-#include "RI.h"
-#include "Check.h"
+#include <cstdlib>
+#include <cmath>
+#include "RI.hpp"
 
 using namespace std;
 
-static char *workDir; /* work directory */
-
-typedef struct Atom *atm;
-struct Atom{ double x; double y; atm *next; };
-
+const double pi = 3.1415926535897932384626433832795028841;
 static atm headB;
 static atm headT;
+static int nS; // # of bottom C which overlap with top ones
+static double S; // total overlaping area
+static double rad; // radius of the C atom
+
 
 /* ******************************************************************* */
 /* Create a new 'Atom' and returns its pointer.                        */
@@ -57,7 +58,7 @@ static atm NEW ()
    int i;
    atm a;
 
-   a = (atm *) CHECKmalloc (sizeof *a); /* allocate the 'Atom' */
+   a = (atm) malloc (sizeof *a); /* allocate the 'Atom' */
    a->x = 0;
    a->y = 0;
    a->next = NULL;
@@ -70,8 +71,8 @@ static atm NEW ()
 /* Initialize two linked lists (create their head nodes).              */
 void ATinit ()
 {
-   headB = NEW (); /* creates the head node */
-   headT = NEW (); /* creates the head node */
+   headB = NEW ();
+   headT = NEW ();
 
 } /* ATinit */
 
@@ -80,12 +81,8 @@ void ATinit ()
 /* structures and read those files.                                    */
 void RIinit (char *exec, char *bot, char *top)
 {
-   register int i, j, len;
-   int nBot, nTop;
-   Coord *xyBot, *xyTop;
-   char *inputFile;
-   ifstream Fxyz;
-   double foo;
+   register int i, len;
+   char *workDir;
 
    /* Get the lenth of work directory path. */
    len = strlen (exec);
@@ -94,7 +91,7 @@ void RIinit (char *exec, char *bot, char *top)
    len = i + 1;
 
    /* Assigns the work directory global variable. */
-   workDir = (char *) CHECKmalloc (len * sizeof (char));
+   workDir = (char *) malloc (len * sizeof (char));
    for (i = 0; i < len; i++)
       workDir[i] = exec[i];
    workDir[i] = '\0';
@@ -102,52 +99,126 @@ void RIinit (char *exec, char *bot, char *top)
    /* Create two 'Atom' linked list. */
    ATinit ();
 
-   /* Sets 'bottom' xyz file name with work directory path. */
-   len = strlen (workDir) + strlen(bot);
-   inputFile = (char *) CHECKmalloc (len * sizeof (char));
-   sprintf (inputFile, "%s%s", workDir, bot);
-   Fxyz.open (inputFile, ifstream::in);
-   Fxyz >> nBot; // # bottom of atoms
-   xyBot = new Coord[nBot];
-   for (i = 0; i < nBot; i++) {
-      Fxyz >> foo1;
-      Fxyz >> xyBot[i].x;
-      Fxyz >> xyBot[i].y;
-      Fxyz >> foo2;
-   }
-   Fxyz.close ();
-   free (inputFile);
+   /* Read 'bottom' xyz file. */
+   RIreadXYZ (workDir, bot, headB);
 
-   /* Sets 'top' xyz file name with work directory path. */
-   len = strlen (workDir) + strlen(top);
-   inputFile = (char *) CHECKmalloc (len * sizeof (char));
-   sprintf (inputFile, "%s%s", workDir, top);
-   Fxyz.open (inputFile, ifstream::in);
-   Fxyz >> nTop; // # top of atoms
-   xyTop = new Coord[nTop];
-   for (i = 0; i < nTop; i++) {
-      Fxyz >> xyTop[i].chel;
-      Fxyz >> xyTop[i].x;
-      Fxyz >> xyTop[i].y;
-      Fxyz >> foo;
-   }
-   Fxyz.close ();
-   free (inputFile);
+   /* Read 'top' xyz file. */
+   RIreadXYZ (workDir, top, headT);
 
-   for (i = 0; i < nTop; i++)
-      RIoverlap (xyBot[i], xyTop[i]);
+   /* Free memory */
+   free (workDir);
 
 } // RIinit
 
+
 /* ******************************************************************* */
-void RIoverlap (Coord bot, Coord top)
+/* Read coordinate 'XYZ file and store carbon coordinates in a linked  */
+/* list.                                                               */
+void RIreadXYZ (char *workDir, char *xyzName, atm head)
 {
-   // register int i;
+   register int i, n, len;
+   char name[2];
+   char *inputFile;
+   ifstream Fxyz;
+   atm item, p;
+   double foo;
 
-   cout << bot.x << "  " << bot.y << "  " << top.x << "  " << top.y << endl;
+   /* Sets 'top' xyz file name with work directory path. */
+   len = strlen (workDir) + strlen(xyzName);
+   inputFile = (char *) malloc (len * sizeof (char));
+   sprintf (inputFile, "%s%s", workDir, xyzName);
+   Fxyz.open (inputFile, ifstream::in);
 
+   Fxyz >> n; // # of atoms
+   p = head;
+   for (i = 0; i < n; i++) {
+      Fxyz >> name;
+      if (name[0] == 'C') { // only store xy from C atoms
+	 item = NEW();
+	 Fxyz >> item->x;
+	 Fxyz >> item->y;
+	 Fxyz >> foo;
+	 p->next = item;
+	 p = p->next;
+      }
+      else {
+	 Fxyz >> foo;
+	 Fxyz >> foo;
+	 Fxyz >> foo;
+      }
+   }
+   Fxyz.close ();
+
+   free (inputFile);
+
+} // RIreadXYZ
+
+/* ******************************************************************* */
+/* Compute the total overlap between carbons from two different        */
+/* layers. The overlaping area is given by the area of two overlaping  */
+/* sectors. Since we are considering only carbons (i.e. only one kind  */
+/* of circle), this area is given by the two overlaping sectors.       */
+/* Therefore, the overlaping area can be calculated as two times the   */
+/* the area of the segment of the sector subtracted by the area of its */
+/* triangle.                                                           */
+void RIoverlap (char *r)
+{
+   // int nStop;
+   double d;
+   atm b, t;
+   
+   S = 0; // total overlaping area
+   nS = 0; // # of bottom C which overlap with top ones
+   // nStop = 0;
+   rad = atof (r);
+   b = headB;
+   while (b->next != NULL) { // compare each C from bottom with...
+      b = b->next;
+      t = headT;
+      while (t->next != NULL) { // each C from top
+	 t = t->next;
+	 d = RIdist (b, t);
+	 if (d < 2*rad) {
+	    /* 2*(A_segment - A_triangle) */
+	    S += 2*rad*rad*acos(d/(2*rad))-d*sqrt(4*rad*rad-d*d)/2;
+	    nS++;
+	    // nStop++;
+	 }
+      }
+   }
+   // cout << nS << " " << nStop << endl;
 
 } // RIoverlap
+
+/* ******************************************************************* */
+/* Return the distance (Euclidian metric) between two vectors in R2.   */
+double RIdist (atm b, atm t)
+{
+   double dx, dy;
+
+   dx = b->x - t->x;
+   dy = b->y - t->y;
+
+   return sqrt(dx*dx + dy*dy);
+
+} // RIdist
+
+/* ******************************************************************* */
+/* Compute the registry index.                                         */
+void RI ()
+{
+   double S_AA, S_AB, regIdx;
+
+   S_AA = 131*pi*rad*rad; // maximum overlap case
+   S_AB = 65*pi*rad*rad; // minimum overlap case
+
+   regIdx = (S - S_AB)/(S_AA - S_AB);
+
+   cout << S << " " << S_AA << " " << S_AB << endl;
+   printf (" Registry Index: %.10f\n", regIdx);
+
+} // RI
+
 
 /* ***************************** Drafts ****************************** */
 
