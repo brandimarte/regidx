@@ -50,4 +50,7 @@ void RIoverlap (char *rad);
 double RIdist (atm b, atm t);
 
 /* Compute the registry index. */
-void RI ();
+void RI (int nAA = 131, int nAB = 65);
+
+/* Free memory. */
+void RIfree ();

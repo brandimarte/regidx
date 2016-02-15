@@ -46,7 +46,7 @@ LDLIBS = $(LIBS)
 INCFLAGS = -I.
 
 # Preprocessor definitions or flags.
-#FPPFLAGS = 
+FPPFLAGS = 
 
 # Remove command.
 RM = /bin/rm -f

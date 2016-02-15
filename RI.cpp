@@ -205,18 +205,40 @@ double RIdist (atm b, atm t)
 
 /* ******************************************************************* */
 /* Compute the registry index.                                         */
-void RI ()
+void RI (int nAA, int nAB)
 {
    double S_AA, S_AB, regIdx;
 
-   S_AA = 131*pi*rad*rad; // maximum overlap case
-   S_AB = 65*pi*rad*rad; // minimum overlap case
+   S_AA = nAA*pi*rad*rad; // maximum overlap case
+   S_AB = nAB*pi*rad*rad; // minimum overlap case
 
    regIdx = (S - S_AB)/(S_AA - S_AB);
 
-   printf (" Registry Index: %.10f\n", regIdx);
+   printf (" Registry Index: %.3f ( %.3f Ang^2)\n", regIdx, S);
 
 } // RI
+
+/* ******************************************************************* */
+/* Free linked lists.                                                  */
+void RIfree ()
+{
+   atm p;
+
+   while (headB->next != NULL) {
+      p = headB->next;
+      headB->next = p->next;
+      free (p);
+   }
+   free (headB);
+
+   while (headT->next != NULL) {
+      p = headT->next;
+      headT->next = p->next;
+      free (p);
+   }
+   free (headT);
+
+} // RIfree
 
 
 /* ***************************** Drafts ****************************** */

@@ -61,6 +61,7 @@ static void howto ();
 
 int main (int nargs, char *arg[])
 {
+   int nAA, nAB;
    double time;
    clock_t inicial, final;
 
@@ -68,7 +69,7 @@ int main (int nargs, char *arg[])
    header ();
 
    /* Checks if the input were typed correctly. */
-   if (nargs != 4) {
+   if (nargs != 4 && nargs != 6) {
       cerr << "\n Wrong number of arguments!\n";
       howto ();
       exit (EXIT_FAILURE);
@@ -84,7 +85,16 @@ int main (int nargs, char *arg[])
    RIoverlap (arg[3]);
 
    /* Compute the registry index. */
-   RI ();
+   if (nargs == 4)
+      RI ();
+   else {
+      nAA = atoi(arg[4]);
+      nAB = atoi(arg[5]);
+      RI (nAA, nAB);
+   }
+
+   /* Free memory. */
+   RIfree ();
 
    /* Calculates the execution time. */
    final = clock();
@@ -142,10 +152,15 @@ static void header ()
 static void howto ()
 {
 
-   cerr << "\n Usage: $ regidx"; // arg[0]
-   cerr << " [bottom xyz coordinate file] \\\n"; // arg[1]
-   cerr << "        > [top xyz coordinate file]"; // arg[2]
-   cerr << " [circle radius (angstrom)]\n\n"; // arg[3]
-   cerr << " Example: $ regidx bottom.xyz top.xyz 0.71\n\n";
+   cerr << "\n Usage:\n";
+   cerr << "   $ regidx"; // arg[0]
+   cerr << " [bottom xyz coordinate file]"; // arg[1]
+   cerr << " [top xyz coordinate file] \\\n"; // arg[2]
+   cerr << "   > [circle radius (angstrom)]"; // arg[3]
+   cerr << " [(optional) # of atoms in AA] \\\n"; // arg[4]
+   cerr << "   > [(optional) # of atoms in AB]\n\n"; // arg[5]
+   cerr << " Examples: \n";
+   cerr << "        $ regidx bottom.xyz top.xyz 0.71\n";
+   cerr << "        $ regidx bottom.xyz top.xyz 0.71 131 65\n\n";
 
 } /* howto */

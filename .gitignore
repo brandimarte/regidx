@@ -3,6 +3,6 @@
 *.a
 *.log
 make.inc
-regidx.*
+regidx*
 !.gitignore
 
